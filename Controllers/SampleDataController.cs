@@ -18,7 +18,7 @@ namespace WebApplicationBasic.Controllers
         [HttpGet("{size}")]
         public JsonResult WeatherForecasts(int size)
         {
-            if (size > 10000) size = 10000;
+            if (size > 100000) size = 100000;
             var token = new byte[size];
             generator.GetBytes(token);
             string result = Convert.ToBase64String(token);

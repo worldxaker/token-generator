@@ -7,7 +7,7 @@ import { Http } from '@angular/http';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    size: any = 32;
+    size: number = 32;
 
     result: string
     http: Http;
@@ -17,10 +17,18 @@ export class AppComponent {
     }
 
     get() {
-        this.result = "loading"
-        this.http.get('/api/token/' + this.size).subscribe(x => {
-            this.result = x.json();
-        });
+        if (this.size > 1 && this.size <= 100000) {
+            this.result = "loading"
+            this.http.get('/api/token/' + this.size).subscribe(x => {
+                this.result = x.json();
+            });
+        } else {
+            if (this.size < 1) {
+                this.result = "Размер токена должен быть положительным"
+            } else {
+                this.result = "Размер токена должен быть меньше 100000"
+            }
+        }
     }
 
 }
