@@ -1,44 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 
 namespace WebApplicationBasic.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     public class SampleDataController : Controller
     {
-        private static string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private static readonly RandomNumberGenerator generator = RandomNumberGenerator.Create();
 
-        [HttpGet("[action]")]
-        public IEnumerable<WeatherForecast> WeatherForecasts()
+        [Route("api/token/{size}")]
+        [HttpGet("{size}")]
+        public JsonResult WeatherForecasts(int size)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            if (size > 10000) size = 10000;
+            var token = new byte[size];
+            generator.GetBytes(token);
+            string result = Convert.ToBase64String(token);
+            string res = "";
+            for (int i = 0; i < size; i++)
             {
-                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            });
-        }
-
-        public class WeatherForecast
-        {
-            public string DateFormatted { get; set; }
-            public int TemperatureC { get; set; }
-            public string Summary { get; set; }
-
-            public int TemperatureF
-            {
-                get
+                if (result[i] == '+' || result[i] == '/')
                 {
-                    return 32 + (int)(TemperatureC / 0.5556);
+                    i++;
+                    size++;
                 }
+                res += result[i];
             }
+
+            return Json(res);
         }
+
+
     }
 }

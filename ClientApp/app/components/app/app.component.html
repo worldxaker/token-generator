@@ -3,8 +3,22 @@
         <div class='col-sm-3'>
             <!--<nav-menu></nav-menu>-->
         </div>
-        <div class='col-sm-9 body-content'>
+        <div class='col-sm-6 body-content'>
             <!--<router-outlet></router-outlet>-->
+            <form role="form">
+                <br>
+                <br>
+                <br>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Размер токена</label>
+                    <input [(ngModel)]="size" name="first" type="number" class="form-control" placeholder="Введите размер токена">
+                </div>
+                <button (click)="get()" type="submit" class="btn btn-default">Генерировать</button>
+            </form>
+            <h4 style="word-wrap:break-word">{{result}}</h4>
+
+        </div>
+        <div class='col-sm-3'>
         </div>
     </div>
 </div>
